@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:1.0.0-preview2-windowsservercore-sdk
+FROM microsoft/dotnet:1.0.0-preview2.1-nanoserver-sdk
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
 
