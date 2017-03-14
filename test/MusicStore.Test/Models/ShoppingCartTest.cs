@@ -49,7 +49,7 @@ namespace MusicStore.Test
 
             var services = new ServiceCollection();
 
-            services.AddDbContext<MusicStoreContext>(b => b.UseInMemoryDatabase().UseInternalServiceProvider(efServiceProvider));
+            services.AddDbContext<MusicStoreContext>(b => b.UseInMemoryDatabase("MusicStore").UseInternalServiceProvider(efServiceProvider));
 
             _serviceProvider = services.BuildServiceProvider();
         }
