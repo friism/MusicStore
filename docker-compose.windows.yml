@@ -1,12 +1,16 @@
 version: '3'
 services:
   db:
-    image: microsoft/mssql-server-windows-express
+    image: microsoft/mssql-server-windows-developer
     environment:
       sa_password: "Password1"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433" # REMARK: This is currently required, needs investigation
+    healthcheck:
+      test: [ "CMD", "sqlcmd", "-U", "sa", "-P", "Password1", "-Q", "select 1" ]
+      interval: 1s
+      retries: 30
 
   web:
     build:
@@ -15,11 +19,6 @@ services:
     environment:
       - "Data:DefaultConnection:ConnectionString=Server=db,1433;Database=MusicStore;User Id=sa;Password=Password1;MultipleActiveResultSets=True"
     depends_on:
-      - "db"
+      - db
     ports:
       - "5000:5000"
-
-networks:
-  default:
-    external:
-      name: nat
