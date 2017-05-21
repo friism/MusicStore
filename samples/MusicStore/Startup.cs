@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +46,10 @@ namespace MusicStore
             else
             {
                 services.AddDbContext<MusicStoreContext>(options =>
-                    options.UseSqlServer(Configuration[StoreConfig.ConnectionStringKey.Replace("__", ":")]));
+                    options.UseSqlServer(Configuration[StoreConfig.ConnectionStringKey.Replace("__", ":")],
+                        // Retrying on 18456 helps `docker-compose up` because the sa password is set after db container starts
+                        sqlServerOptions => sqlServerOptions
+                            .EnableRetryOnFailure(100, new TimeSpan(0, 5, 0), new int[] { 18456 })));
             }
 
             // Add Identity services to the services container
