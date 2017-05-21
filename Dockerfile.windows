@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:2.0-sdk-nanoserver
+FROM microsoft/dotnet-nightly:2.0-sdk-nanoserver as builder
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
@@ -20,7 +20,7 @@ RUN dotnet publish --output /out --configuration Release --framework netcoreapp2
 FROM microsoft/dotnet-nightly:2.0-runtime-nanoserver
 
 WORKDIR /app
-COPY --from=0 /out .
+COPY --from=builder /out .
 
 EXPOSE 5000
 ENV ASPNETCORE_URLS http://0.0.0.0:5000
